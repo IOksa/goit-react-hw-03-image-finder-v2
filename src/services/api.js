@@ -12,9 +12,15 @@ export const getFetchQueryImageGallery = async (searchQuery, countPage)=>{
         page: countPage,
 
     });
+        console.log("getFetchQueryImageGallery");
+        //console.log("fetch searchQuery=", searchQuery);
+        const fetchQuery=`${BASE_URL}?${params}`;
+        //console.log("fetch fetchQuery=", fetchQuery);
 
-        const response = await axios.get(`${BASE_URL}?${params}`);
-        console.log("fetch searchQuery=", searchQuery);
+        const response = await axios.get(fetchQuery);
+       
+        //console.log("fetch response.data=", response.data);
+
         return response.data;
 
        

@@ -1,17 +1,21 @@
-import ReactDOM from 'react-dom';
+import {createPortal} from 'react-dom';
 import PropTypes from 'prop-types';
 import css from './Modal.module.css';
 
-const Modal=({largeImageURL,tags, onCloseModal, onBackDropClick})=>{
-    return ReactDOM.createPortal(
-        <div className={css.Overlay} onClick={
-            (event) =>{
-                console.log('onBackdropClick=', event);
+const Modal=({children, onCloseModal})=>{
+    return createPortal(
+        <div className={css.Overlay} 
+        
+            //закрытие модалки по клику на бекдроп
+             onClick={(event) =>{
                 if (event.currentTarget === event.target) {
-                    this.onCloseModal();
+                    console.log("Modal onClick (backdrop)")
+                    onCloseModal();
+
                 }}}>
-            <div className={css.Modal}>
-                <img src={largeImageURL} alt={tags} onClick={onCloseModal} width="800" />
+
+            <div className={css.Modal}>{children}
+              
             </div>
         </div>,
         document.querySelector("#popup-root")
@@ -25,10 +29,8 @@ export default Modal;
 
 
 Modal.propTypes={
-    largeImageURL: PropTypes.string.isRequired,
-    tags:  PropTypes.string.isRequired,
-  
+ 
     onCloseModal: PropTypes.func.isRequired,
-   // onBackDropClick: PropTypes.func.isRequired,
+
 }; 
 

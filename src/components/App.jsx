@@ -13,56 +13,82 @@ export class App extends Component{
   state = {
     query:'',
     gallery: [],
-    isLoading: false,
-
     countPage: 1,
+    isLoading: false,
     isLoadButton: true,
   };
 
 
-  //Получение данных по запросу fetch для первого рендера галлереи
-  getFirstImageGallery = async (searchQuery) => {
+  componentDidUpdate(prevProps, prevState) {
+    console.log("componentDidUpdate");
+    console.log("componentDidUpdate prevState=", prevState);
+    console.log("componentDidUpdate this.state=", this.state);
 
-    this.setState({ query: searchQuery.query });
-    this.setState({gallery: []});
-    this.setState({countPage: 1});
-    this.setState({isLoadButton: true});
-    const {countPage} = this.state;
+    //prevState.gallery.length>this.state.gallery.length - эта проверка на случай, если пользователь отправит снова тот же запрос, уже загрузив первую страницу для такого же предыдущего запроса. В этом случае запросы и страницы будут равны и componentDidUpdate не запустит this.fetchImages(). При этом при изменении input срабатывает onChangeQuery и gallery: [] , поэтому <ImageGallery> не отрисовывается.
 
-    console.log("getImageGallery searchQuery.query=", searchQuery.query);
-    console.log("getImageGallery countPage=", countPage);
-
-    if(searchQuery.query!==''){
-      try {
-        this.setState({ isLoading: true });
-        const images = await API.getFetchQueryImageGallery(searchQuery.query, 1);
-        this.checkQueryResponse(images);
-        
-      } catch (error) {
-
-        const errorMessage="Ой! Что-то пошло не так :( Перезагрузите страницу и попробуйте еще раз."+error.toString();
-        toast.error(errorMessage);
+    if (prevState.query !== this.state.query ||
+       prevState.countPage !== this.state.countPage ||
+       prevState.gallery.length > this.state.gallery.length
+       ) {
+      console.log("componentDidUpdate запускаю this.fetchImages()");
+      this.fetchImages();
       
-      }finally{
-        this.setState({isLoading: false });
-    
-      }
     }
-    else{
+  }
+
+  onChangeQuery = searchQuery => {
+    console.log('onChangeQuery');
+
+    // console.log('searchQuery=', searchQuery);
+
+    if(searchQuery.query===''){
       toast.error('Empty search input');
+      return;
     }
+    this.setState({
+      query: searchQuery.query,
+      countPage: 1,
+      gallery: [],
+      error: null,
+    });
+
+    
   };
 
+
+  fetchImages = async () => {
+    console.log('fetchImages');
+    const { query, countPage } = this.state;
+
+    try {
+      this.setState({ isLoading: true });
+      const images = await API.getFetchQueryImageGallery(query, countPage);
+      this.checkQueryResponse(images);
+    }
+    catch(error) {
+      this.setState({ error })
+      const errorMessage="Ой! Что-то пошло не так :( Перезагрузите страницу и попробуйте еще раз."+error.toString();
+      toast.error(errorMessage);
+    }
+    finally{
+      this.setState({isLoading: false });
+    }
+
+    
+  };
+
+ 
+
   checkQueryResponse=(images)=>{
+    console.log('checkQueryResponse');
     if (images.length===0){
       toast.error('Sorry, there are no images matching your search query. Please try again.');
     }
     else{
-   
-      this.setState({gallery: [...this.state.gallery, ...images.hits]});
- 
-      console.log("images=",images.hits);
-      console.log("this.state.gallery=", this.state.gallery);
+      this.setState(prevState => ({gallery: [...prevState.gallery, ...images.hits]}));
+
+      // console.log("images=",images.hits);
+      // console.log("this.state.gallery=", this.state.gallery);
 
     }
       
@@ -73,47 +99,24 @@ export class App extends Component{
  
   }
     
-  
-
-   onClickLoadMore= async ()=>{
-    console.log("onClickLoadMore");
-
-    const nextPage=this.state.countPage+1;
-    this.setState({countPage: nextPage});
-
-    console.log("onClickLoadMore query=", this.state.query);
-
-    console.log("onClickLoadMore nextPage=", nextPage);
-    const {query} = this.state;
-
-    try {
-      this.setState({ isLoading: true });
-
-      const images = await API.getFetchQueryImageGallery(query, nextPage);
-
-      this.checkQueryResponse(images);
-      
-    } catch (error) {
- 
-      const errorMessage="Ой! Что-то пошло не так :( Перезагрузите страницу и попробуйте еще раз."+error.toString();
-      toast.error(errorMessage);
-    
-    }finally{
-      this.setState({isLoading: false });
-     
-    }
+  handleOnClickLoadMore =()=>{
+    this.setState(prevState => ({countPage: prevState.countPage + 1}));
   }
 
   render(){
+    console.log('render');
     const { gallery, isLoading, isLoadButton} = this.state;
-    console.log("render gallery=", gallery);
+    //console.log("render gallery=", gallery);
+    const shouldRenderImageGallery=gallery.length!==0 && !isLoading;
+    const shouldRenderLoadButton=gallery.length!==0 && !isLoading && isLoadButton;
+
     return(
       <>
       <ToastContainer autoClose="3000" theme="colored"/>
-      <Searchbar onSubmit={this.getFirstImageGallery}/>
+      <Searchbar onSubmit={this.onChangeQuery}/>
       {isLoading && <Loader/>}
-      {gallery.length!==0 && !isLoading && <ImageGallery gallery={gallery}/>}
-      {gallery.length!==0 && !isLoading && isLoadButton && <Button onClickLoadMore={this.onClickLoadMore}/>}
+      {shouldRenderImageGallery && <ImageGallery gallery={gallery}/>}
+      {shouldRenderLoadButton && <Button onClickLoadMore={this.handleOnClickLoadMore}/>}
       
       </>
     );

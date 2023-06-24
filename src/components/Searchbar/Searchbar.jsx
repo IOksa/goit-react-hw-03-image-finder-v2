@@ -7,8 +7,8 @@ class Searchbar extends Component{
         query:'',
     }
 
-    handleChange = ({ target: { name, value } }) => {
-        this.setState({ [name]: value.trim() });
+    handleChange = e => {
+        this.setState({query: e.currentTarget.value});
 
     };
 

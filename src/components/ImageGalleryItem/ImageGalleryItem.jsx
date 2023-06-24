@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import Modal from '../Modal/Modal';
+import BigImageInModal from '../BigImageInModal/BigImageInModal';
 import css from './ImageGalleryItem.module.css';
+
 
 class ImageGalleryItem extends Component{ 
   state = {
@@ -13,7 +15,7 @@ class ImageGalleryItem extends Component{
 		this.setState({ isModalOpen: true });
     window.addEventListener('keydown', this.onEscKeyPress);
     
-    console.log("onOpenModal", this.state.isModalOpen);
+    //console.log("onOpenModal", this.state.isModalOpen);
 	};
 
   onCloseModal = () => {
@@ -30,12 +32,6 @@ class ImageGalleryItem extends Component{
     }
   };
 
-  // onBackdropClick=(event) =>{
-  //   console.log('onBackdropClick=', event);
-  //   if (event.currentTarget === event.target) {
-  //       this.onCloseModal();
-  //   }
-  // }
 
   scrollToBottom = () => {
     this.messagesEnd.scrollIntoView({behavior: "smooth" });
@@ -50,23 +46,31 @@ class ImageGalleryItem extends Component{
     this.scrollToBottom();
   }
 
+
+
+
+
+
+
+
   render(){
     const {isModalOpen}=this.state;
     const {image:{webformatURL,tags,largeImageURL}}=this.props;
 
     return (
       <>
-        <li className={css.ImageGalleryItem} ref={(el) => { this.messagesEnd = el; }}>
-          <img src={webformatURL} alt={tags} loading="lazy" className={css.ImageGalleryItemImage} onClick={this.onOpenModal}/>
+     
+        <li className={css.ImageGalleryItem} onClick={this.onOpenModal} ref={(el) => { this.messagesEnd = el; } }>
+
+          <img src={webformatURL} alt={tags} loading="lazy" className={css.ImageGalleryItemImage} />
+
         </li>
-        {isModalOpen && 
-        <Modal
-          largeImageURL={largeImageURL}
-          tags={tags}
-          onCloseModal={this.onCloseModal}
-          onBackDropClick={this.onBackdropClick}
-        />}
-      
+       
+        {isModalOpen && (
+        <Modal onCloseModal={this.onCloseModal} >
+          <BigImageInModal largeImageURL={largeImageURL} tags={tags} />
+        </Modal>
+        )}
       </>
       
       );
@@ -79,6 +83,7 @@ class ImageGalleryItem extends Component{
 
  
 export default ImageGalleryItem;
+
 
 
 
