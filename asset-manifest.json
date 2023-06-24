@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/github.com/IOksa/goit-react-hw-03-image-finder-v2/static/css/main.77c59c79.css",
-    "main.js": "/github.com/IOksa/goit-react-hw-03-image-finder-v2/static/js/main.76174aa8.js",
-    "static/media/Magnifying_glass_icon.svg.png": "/github.com/IOksa/goit-react-hw-03-image-finder-v2/static/media/Magnifying_glass_icon.svg.0a7ef0e3fb615c7d687f.png",
-    "index.html": "/github.com/IOksa/goit-react-hw-03-image-finder-v2/index.html",
-    "static/media/sprite.svg": "/github.com/IOksa/goit-react-hw-03-image-finder-v2/static/media/sprite.2cbc8a7b88813363ee92a5cff6233502.svg",
-    "main.77c59c79.css.map": "/github.com/IOksa/goit-react-hw-03-image-finder-v2/static/css/main.77c59c79.css.map",
-    "main.76174aa8.js.map": "/github.com/IOksa/goit-react-hw-03-image-finder-v2/static/js/main.76174aa8.js.map"
+    "main.css": "/goit-react-hw-03-image-finder-v2/static/css/main.01e5cd46.css",
+    "main.js": "/goit-react-hw-03-image-finder-v2/static/js/main.98157283.js",
+    "static/media/Magnifying_glass_icon.svg.png": "/goit-react-hw-03-image-finder-v2/static/media/Magnifying_glass_icon.svg.0a7ef0e3fb615c7d687f.png",
+    "index.html": "/goit-react-hw-03-image-finder-v2/index.html",
+    "static/media/sprite.svg": "/goit-react-hw-03-image-finder-v2/static/media/sprite.2cbc8a7b88813363ee92a5cff6233502.svg",
+    "main.01e5cd46.css.map": "/goit-react-hw-03-image-finder-v2/static/css/main.01e5cd46.css.map",
+    "main.98157283.js.map": "/goit-react-hw-03-image-finder-v2/static/js/main.98157283.js.map"
   },
   "entrypoints": [
-    "static/css/main.77c59c79.css",
-    "static/js/main.76174aa8.js"
+    "static/css/main.01e5cd46.css",
+    "static/js/main.98157283.js"
   ]
 }
